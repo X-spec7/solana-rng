@@ -1,6 +1,5 @@
-import { IdlAccounts, Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
 import { IDL, RandomNumberGenerator } from "./idl";
-import { BN } from "bn.js";
 import {
   clusterApiUrl,
   Connection,
@@ -10,7 +9,7 @@ import {
 
 import adminKeypairArray from "./wallet/admin.json";
 
-export const programId = new PublicKey("8N2g6ZSRJLf3JdJNtc2MadQnWhXxSg5AWNH1PUWBLivC");
+export const programId = new PublicKey("9QFtTFeHQKe2BGmwAY2iUEN4SBywa9FuGC1qvJr6D31g");
 export const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 export const getAdminKeypair = () => {
@@ -21,11 +20,9 @@ export const getAdminPublicKey = () => {
   return getAdminKeypair().publicKey;
 };
 
-const wallet = new Wallet(getAdminKeypair());
-
-const provider = new AnchorProvider(connection, wallet, { commitment: "confirmed" });
-
-export const rngProgram = new Program<RandomNumberGenerator>(IDL, programId, provider);
+export const rngProgram = new Program<RandomNumberGenerator>(IDL, programId, {
+  connection
+});
 
 export const RANDOM_DATA_SEED = "RANDOM_DATA";
 

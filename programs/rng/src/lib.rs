@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use sha2::{Digest, Sha256};
 
 // Declare the program ID
-declare_id!("H6XFzHEg8yparic31ZTBFGUefQF1BouKvWYfBZVYWSHc");
+declare_id!("9QFtTFeHQKe2BGmwAY2iUEN4SBywa9FuGC1qvJr6D31g");
 
 #[program]
 mod random_number_generator {
