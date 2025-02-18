@@ -1,53 +1,24 @@
 export type RandomNumberGenerator = {
-  "name": "randomNumberGenerator",
   "version": "0.1.0",
-  "address": "H6XFzHEg8yparic31ZTBFGUefQF1BouKvWYfBZVYWSHc",
+  "name": "random_number_generator",
   "instructions": [
     {
       "name": "generateRandomNumbers",
-      "discriminator": [
-        250,
-        76,
-        134,
-        255,
-        213,
-        102,
-        27,
-        119
-      ],
       "accounts": [
         {
           "name": "randomData",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  82,
-                  65,
-                  78,
-                  68,
-                  79,
-                  77,
-                  95,
-                  68,
-                  65,
-                  84,
-                  65
-                ]
-              }
-            ]
-          }
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "user",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -55,9 +26,7 @@ export type RandomNumberGenerator = {
           "name": "ranges",
           "type": {
             "vec": {
-              "defined": {
-                "name": "range"
-              }
+              "defined": "Range"
             }
           }
         },
@@ -82,43 +51,6 @@ export type RandomNumberGenerator = {
   "accounts": [
     {
       "name": "randomData",
-      "discriminator": [
-        67,
-        86,
-        42,
-        153,
-        136,
-        146,
-        179,
-        131
-      ]
-    }
-  ],
-  "events": [
-    {
-      "name": "randomNumbersGenerated",
-      "discriminator": [
-        194,
-        17,
-        124,
-        217,
-        136,
-        53,
-        17,
-        174
-      ]
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "invalidRange",
-      "msg": "Invalid range specified."
-    }
-  ],
-  "types": [
-    {
-      "name": "randomData",
       "type": {
         "kind": "struct",
         "fields": [
@@ -130,23 +62,11 @@ export type RandomNumberGenerator = {
           }
         ]
       }
-    },
+    }
+  ],
+  "types": [
     {
-      "name": "randomNumbersGenerated",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "randomNumbers",
-            "type": {
-              "vec": "u64"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "range",
+      "name": "Range",
       "type": {
         "kind": "struct",
         "fields": [
@@ -160,60 +80,52 @@ export type RandomNumberGenerator = {
           }
         ]
       }
+    }
+  ],
+  "events": [
+    {
+      "name": "RandomNumbersGenerated",
+      "fields": [
+        {
+          "name": "randomNumbers",
+          "type": {
+            "vec": "u64"
+          },
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidRange",
+      "msg": "Invalid range specified."
     }
   ]
 };
 
 export const IDL: RandomNumberGenerator = {
-  "name": "randomNumberGenerator",
   "version": "0.1.0",
-  "address": "H6XFzHEg8yparic31ZTBFGUefQF1BouKvWYfBZVYWSHc",
+  "name": "random_number_generator",
   "instructions": [
     {
       "name": "generateRandomNumbers",
-      "discriminator": [
-        250,
-        76,
-        134,
-        255,
-        213,
-        102,
-        27,
-        119
-      ],
       "accounts": [
         {
           "name": "randomData",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  82,
-                  65,
-                  78,
-                  68,
-                  79,
-                  77,
-                  95,
-                  68,
-                  65,
-                  84,
-                  65
-                ]
-              }
-            ]
-          }
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "user",
-          "writable": true,
-          "signer": true
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -221,9 +133,7 @@ export const IDL: RandomNumberGenerator = {
           "name": "ranges",
           "type": {
             "vec": {
-              "defined": {
-                "name": "range"
-              }
+              "defined": "Range"
             }
           }
         },
@@ -248,43 +158,6 @@ export const IDL: RandomNumberGenerator = {
   "accounts": [
     {
       "name": "randomData",
-      "discriminator": [
-        67,
-        86,
-        42,
-        153,
-        136,
-        146,
-        179,
-        131
-      ]
-    }
-  ],
-  "events": [
-    {
-      "name": "randomNumbersGenerated",
-      "discriminator": [
-        194,
-        17,
-        124,
-        217,
-        136,
-        53,
-        17,
-        174
-      ]
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "invalidRange",
-      "msg": "Invalid range specified."
-    }
-  ],
-  "types": [
-    {
-      "name": "randomData",
       "type": {
         "kind": "struct",
         "fields": [
@@ -296,23 +169,11 @@ export const IDL: RandomNumberGenerator = {
           }
         ]
       }
-    },
+    }
+  ],
+  "types": [
     {
-      "name": "randomNumbersGenerated",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "randomNumbers",
-            "type": {
-              "vec": "u64"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "range",
+      "name": "Range",
       "type": {
         "kind": "struct",
         "fields": [
@@ -326,6 +187,27 @@ export const IDL: RandomNumberGenerator = {
           }
         ]
       }
+    }
+  ],
+  "events": [
+    {
+      "name": "RandomNumbersGenerated",
+      "fields": [
+        {
+          "name": "randomNumbers",
+          "type": {
+            "vec": "u64"
+          },
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidRange",
+      "msg": "Invalid range specified."
     }
   ]
 };
