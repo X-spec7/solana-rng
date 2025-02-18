@@ -49,7 +49,7 @@ pub struct GenerateRandom<'info> {
         seeds = [b"RANDOM_DATA"],
         bump,
         payer = user,
-        space = 8 + 64 * 4,
+        space = 8 + 64 * 16,
     )]
     pub random_data: Account<'info, RandomData>,
     #[account(mut)]
