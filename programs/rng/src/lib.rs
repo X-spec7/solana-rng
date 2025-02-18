@@ -31,6 +31,7 @@ mod random_number_generator {
             let random_value = u64::from_le_bytes(result[0..8].try_into().unwrap());
             let scaled_random_value = random_value % (range.max_range - range.min_range + 1) + range.min_range;
 
+            msg!("Random number {}: {}", i, scaled_random_value);
             random_numbers.push(scaled_random_value);
         }
 

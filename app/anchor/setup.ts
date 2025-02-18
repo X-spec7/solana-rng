@@ -1,3 +1,4 @@
+import bs58 from "bs58";
 import { Program } from "@coral-xyz/anchor";
 import { IDL, RandomNumberGenerator } from "./idl";
 import {
