@@ -20,7 +20,7 @@ export const generateRandomNumbers = async (
   serverSeed: string,
   clientSeed: string,
   nonce: number
-): Promise<number[]> => {
+) => {
   console.log("Starting generateRandomNumbers function...");
 
   const [randomDataPda] = getRandomDataPDA();
@@ -35,54 +35,81 @@ export const generateRandomNumbers = async (
   console.log("Server Seed:", serverSeed);
   console.log("Client Seed:", clientSeed);
   console.log("Nonce:", nonce);
+  
+  const transaction = new Transaction();
 
-  return new Promise<number[]>(async (resolve, reject) => {
-    let listenerId: number;
-    let timeoutId: NodeJS.Timeout;
+  const createRNGTransaction = await rngProgram.methods
+    .generateRandomNumbers(formattedRanges, serverSeed, clientSeed, new BN(nonce))
+    .accounts({
+      randomData: randomDataPda,
+      user: getAdminPublicKey(),
+      systemProgram: SystemProgram.programId,
+    })
+    .instruction();
 
-    try {
-      console.log("Adding event listener for RandomNumbersGenerated...");
-      listenerId = rngProgram.addEventListener("RandomNumbersGenerated", (event) => {
-        console.log("Event data received:", event);
+  transaction.add(createRNGTransaction);
 
-        const randomNumbers = event.randomNumbers.map((num: BNType) => num.toNumber());
-        console.log("Generated Random Numbers:", randomNumbers);
+  const signature = await sendAndConfirmTransaction(connection, transaction, [getAdminKeypair()]);
+  console.log("Transaction signature:", signature);
 
-        rngProgram.removeEventListener(listenerId); // Clean up listener
+  const account = await rngProgram.account.randomData.fetch(randomDataPda);
 
-        console.log("clearing timeout");
-        clearTimeout(timeoutId); // Stop timeout when successful
-        console.log("cleared timeout");
-        resolve(randomNumbers);
-      });
+  const randomNumbers = account.lastGeneratedNumbers.map((bn: BNType) => bn.toNumber())
 
-      const transaction = new Transaction();
+  console.log(
+    'Generated Random Numbers:',
+    randomNumbers
+  );
 
-      const createRNGTransaction = await rngProgram.methods
-        .generateRandomNumbers(formattedRanges, serverSeed, clientSeed, new BN(nonce))
-        .accounts({
-          randomData: randomDataPda,
-          user: getAdminPublicKey(),
-          systemProgram: SystemProgram.programId,
-        })
-        .instruction();
+  return randomNumbers
 
-      transaction.add(createRNGTransaction);
+  // return new Promise<number[]>(async (resolve, reject) => {
+  //   let listenerId: number;
+  //   let timeoutId: NodeJS.Timeout;
 
-      const signature = await sendAndConfirmTransaction(connection, transaction, [getAdminKeypair()]);
-      console.log("Transaction signature:", signature);
+  //   try {
+  //     console.log("Adding event listener for RandomNumbersGenerated...");
+  //     listenerId = rngProgram.addEventListener("RandomNumbersGenerated", (event) => {
+  //       console.log("Event data received:", event);
 
-      // Start a timeout but clear it when the promise resolves
-      timeoutId = setTimeout(() => {
-        console.error("Timeout: Function did not complete within 30s!");
-        rngProgram.removeEventListener(listenerId); // Ensure listener is removed on timeout
-        reject(new Error("Timeout: Function did not complete"));
-      }, 30000); // 30 seconds timeout
-    } catch (error) {
-      console.error("Error generating random numbers:", error);
-      reject(error);
-    }
-  });
+  //       const randomNumbers = event.randomNumbers.map((num: BNType) => num.toNumber());
+  //       console.log("Generated Random Numbers:", randomNumbers);
+
+  //       rngProgram.removeEventListener(listenerId); // Clean up listener
+
+  //       console.log("clearing timeout");
+  //       clearTimeout(timeoutId); // Stop timeout when successful
+  //       console.log("cleared timeout");
+  //       resolve(randomNumbers);
+  //     });
+
+  //     const transaction = new Transaction();
+
+  //     const createRNGTransaction = await rngProgram.methods
+  //       .generateRandomNumbers(formattedRanges, serverSeed, clientSeed, new BN(nonce))
+  //       .accounts({
+  //         randomData: randomDataPda,
+  //         user: getAdminPublicKey(),
+  //         systemProgram: SystemProgram.programId,
+  //       })
+  //       .instruction();
+
+  //     transaction.add(createRNGTransaction);
+
+  //     const signature = await sendAndConfirmTransaction(connection, transaction, [getAdminKeypair()]);
+  //     console.log("Transaction signature:", signature);
+
+  //     // Start a timeout but clear it when the promise resolves
+  //     timeoutId = setTimeout(() => {
+  //       console.error("Timeout: Function did not complete within 30s!");
+  //       rngProgram.removeEventListener(listenerId); // Ensure listener is removed on timeout
+  //       reject(new Error("Timeout: Function did not complete"));
+  //     }, 30000); // 30 seconds timeout
+  //   } catch (error) {
+  //     console.error("Error generating random numbers:", error);
+  //     reject(error);
+  //   }
+  // });
 };
 
 (async () => {

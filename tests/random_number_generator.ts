@@ -24,7 +24,7 @@ describe('random_number_generator', () => {
   };
 
   // Subscribe to the event
-  const listener = program.addEventListener("randomNumbersGenerated", (event, slot) => {
+  const listener = program.addEventListener("RandomNumbersGenerated", (event, slot) => {
     console.log("Received RandomNumbersGenerated event:", event);
     // event.random_numbers will contain the generated numbers (as BN objects if they exceed JS safe integer range)
     // Convert them to numbers if needed:
@@ -56,10 +56,10 @@ describe('random_number_generator', () => {
 
     const account = await program.account.randomData.fetch(randomDataPDA);
 
-    // console.log(
-    //   'Generated Random Numbers:',
-    //   account.lastGeneratedNumbers.map((bn: anchor.BN) => bn.toNumber())
-    // );
+    console.log(
+      'Generated Random Numbers:',
+      account.lastGeneratedNumbers.map((bn: anchor.BN) => bn.toNumber())
+    );
 
     assert.ok(account.lastGeneratedNumbers.length === 2);
     assert.ok(account.lastGeneratedNumbers[0].gte(new anchor.BN(1)) && account.lastGeneratedNumbers[0].lte(new anchor.BN(50)));
