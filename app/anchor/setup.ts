@@ -10,7 +10,7 @@ import {
 
 import adminKeypairArray from "./wallet/admin.json";
 
-export const programId = new PublicKey("9QFtTFeHQKe2BGmwAY2iUEN4SBywa9FuGC1qvJr6D31g");
+export const programId = new PublicKey("CCJbUWAzTFUy2VMvcv5b9GWgGgyjcREomzBhsLFudh5");
 export const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 export const getAdminKeypair = () => {
