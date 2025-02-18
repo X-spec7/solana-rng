@@ -1,6 +1,7 @@
 import { BN } from "bn.js";
 import { PublicKey } from "@solana/web3.js";
-import { Range } from "../idl"; // make sure Range is properly imported from your IDL
+import { IDL } from "../idl";
+import { IRange } from "../types";
 import {
   rngProgram,
   getRandomDataPDA,
@@ -9,17 +10,18 @@ import {
 
 // Function to generate random numbers
 export const generateRandomNumbers = async (
-  ranges: Range[], 
+  ranges: IRange[], 
   serverSeed: string, 
   clientSeed: string, 
   nonce: number
 ): Promise<number[]> => {
   const [randomDataPda] = getRandomDataPDA();
 
+
   try {
     // Subscribe to the event before making the RPC call
     const randomNumbersGeneratedEvent = rngProgram.addEventListener(
-      "randomNumbersGenerated", // Event name
+      "RandomNumbersGenerated", // Event name
       (event) => {
         // Handle the event here
         console.log("Event data received:", event);
