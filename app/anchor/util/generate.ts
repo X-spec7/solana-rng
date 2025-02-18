@@ -8,49 +8,54 @@ import {
   getAdminPublicKey
 } from "../setup"; // import your program and helper functions
 
-// Function to generate random numbers
+type BNType = InstanceType<typeof BN>;
+
 export const generateRandomNumbers = async (
-  ranges: IRange[], 
-  serverSeed: string, 
-  clientSeed: string, 
+  ranges: IRange[],
+  serverSeed: string,
+  clientSeed: string,
   nonce: number
 ): Promise<number[]> => {
   const [randomDataPda] = getRandomDataPDA();
+  
+  const formattedRanges = ranges.map(range => ({
+    minRange: new BN(range.minRange),
+    maxRange: new BN(range.maxRange),
+  }));
 
-
-  try {
-    // Subscribe to the event before making the RPC call
-    const randomNumbersGeneratedEvent = rngProgram.addEventListener(
-      "RandomNumbersGenerated", // Event name
-      (event) => {
-        // Handle the event here
-        console.log("Event data received:", event);
-        const randomNumbers = event.randomNumbers.map((num: BN) => num.toNumber());
-        console.log("Generated random numbers:", randomNumbers);
-        // You can return or process the random numbers here
-        return randomNumbers;
-      }
-    );
-
-    // Call the program's function
-    const tx = await rngProgram.methods
-      .generateRandomNumbers(ranges, serverSeed, clientSeed, new BN(nonce))
-      .accounts({
-        randomData: randomDataPda,
-        user: getAdminPublicKey(), // User's public key
-        systemProgram: PublicKey.default,
-      })
-      .rpc();
-
-    console.log("Transaction successful:", tx);
-
-    // Wait for the event to be received (or handle the event immediately inside the listener)
-    return new Promise<number[]>((resolve) => {
-      randomNumbersGeneratedEvent.then((randomNumbers) => resolve(randomNumbers));
-    });
+  return new Promise<number[]>((resolve, reject) => {
+    let listenerId: number;
     
-  } catch (error) {
-    console.error("Error generating random numbers:", error);
-    throw error; // Rethrow to handle it outside the function
-  }
+    try {
+      listenerId = rngProgram.addEventListener(
+        "RandomNumbersGenerated",
+        (event) => {
+          console.log("Event data received:", event);
+          const randomNumbers = event.randomNumbers.map((num: BNType) => num.toNumber());
+          console.log("Generated random numbers:", randomNumbers);
+
+          rngProgram.removeEventListener(listenerId); // Clean up the listener
+          resolve(randomNumbers);
+        }
+      );
+
+      rngProgram.methods
+        .generateRandomNumbers(formattedRanges, serverSeed, clientSeed, new BN(nonce))
+        .accounts({
+          randomData: randomDataPda,
+          user: getAdminPublicKey(),
+          systemProgram: PublicKey.default,
+        })
+        .rpc()
+        .then(tx => console.log("Transaction successful:", tx))
+        .catch(error => {
+          console.error("Error in transaction:", error);
+          reject(error);
+        });
+
+    } catch (error) {
+      console.error("Error generating random numbers:", error);
+      reject(error);
+    }
+  });
 };

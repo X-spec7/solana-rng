@@ -1,4 +1,4 @@
 export interface IRange {
-  minValue: number
-  maxValue: number
+  minRange: number
+  maxRange: number
 }
