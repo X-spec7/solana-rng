@@ -1,9 +1,9 @@
-export type RandomNumberGenerator = {
+export type Otp = {
   "version": "0.1.0",
-  "name": "random_number_generator",
+  "name": "otp",
   "instructions": [
     {
-      "name": "generateRandomNumbers",
+      "name": "generatePack",
       "accounts": [
         {
           "name": "randomData",
@@ -105,12 +105,12 @@ export type RandomNumberGenerator = {
   ]
 };
 
-export const IDL: RandomNumberGenerator = {
+export const IDL: Otp = {
   "version": "0.1.0",
-  "name": "random_number_generator",
+  "name": "otp",
   "instructions": [
     {
-      "name": "generateRandomNumbers",
+      "name": "generatePack",
       "accounts": [
         {
           "name": "randomData",

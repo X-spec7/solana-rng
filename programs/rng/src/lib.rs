@@ -2,13 +2,13 @@ use anchor_lang::prelude::*;
 use sha2::{Digest, Sha256};
 
 // Declare the program ID
-declare_id!("CCJbUWAzTFUy2VMvcv5b9GWgGgyjcREomzBhsLFudh5");
+declare_id!("Bku2QgshvPT3M5Zg8gSMXbSicB5uLtkTzuejTACzutWm");
 
 #[program]
-mod random_number_generator {
+mod otp {
     use super::*;
 
-    pub fn generate_random_numbers(
+    pub fn generate_pack(
         ctx: Context<GenerateRandom>,
         ranges: Vec<Range>,
         server_seed: String,

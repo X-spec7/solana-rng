@@ -39,7 +39,7 @@ export const generateRandomNumbers = async (
   const transaction = new Transaction();
 
   const createRNGTransaction = await rngProgram.methods
-    .generateRandomNumbers(formattedRanges, serverSeed, clientSeed, new BN(nonce))
+    .generatePack(formattedRanges, serverSeed, clientSeed, new BN(nonce))
     .accounts({
       randomData: randomDataPda,
       user: getAdminPublicKey(),

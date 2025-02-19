@@ -1,6 +1,7 @@
 import bs58 from "bs58";
 import { Program } from "@coral-xyz/anchor";
-import { IDL, RandomNumberGenerator } from "./idl";
+import { IDL, Otp } from "./idl";
+// import { ADMIN_PRIVATE_KEY } from "./wallet/admin";
 import {
   clusterApiUrl,
   Connection,
@@ -8,20 +9,27 @@ import {
   Keypair
 } from "@solana/web3.js";
 
-import adminKeypairArray from "./wallet/admin.json";
+import adminKeypairArray from "./wallet/admin-keypair.json";
 
-export const programId = new PublicKey("CCJbUWAzTFUy2VMvcv5b9GWgGgyjcREomzBhsLFudh5");
+export const programId = new PublicKey("Bku2QgshvPT3M5Zg8gSMXbSicB5uLtkTzuejTACzutWm");
 export const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 export const getAdminKeypair = () => {
   return Keypair.fromSecretKey(Uint8Array.from(adminKeypairArray));
 };
 
+// export const getAdminKeypair = () => {
+//   const decodedAdminKey = bs58.decode(ADMIN_PRIVATE_KEY)
+//   const privateKeyIntArray = [...decodedAdminKey]
+//   console.log('ADMIN KEY---------------->', privateKeyIntArray)
+//   return Keypair.fromSecretKey(bs58.decode(decodedAdminKey));
+// };
+
 export const getAdminPublicKey = () => {
   return getAdminKeypair().publicKey;
 };
 
-export const rngProgram = new Program<RandomNumberGenerator>(IDL, programId, {
+export const rngProgram = new Program<Otp>(IDL, programId, {
   connection
 });
 
